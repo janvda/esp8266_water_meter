@@ -28,13 +28,13 @@ DHT dht(DHTPIN, DHTTYPE);
 #include <ESP8266WiFi.h>
 #include <PubSubClient.h>
 #include <WiFiClient.h> 
-#include "private.h"
+#include "config.h"  // defines all constants starting with CFG_
 
-const char* ssid = PRIV_WIFI_SSID ;  
-const char* password = PRIV_WIFI_PASSWORD;
-const char* host = PRIV_HOST;
+const char* ssid = CFG_WIFI_SSID ;  
+const char* password = CFG_WIFI_PASSWORD;
+const char* host = CFG_HOST;
 
-const char* mqttServer = PRIV_MQTT_SERVER;
+const char* mqttServer = CFG_MQTT_SERVER;
 WiFiClient   espClient;
 PubSubClient mqttClient(espClient);
 long lastMsgTimestamp = 0;
