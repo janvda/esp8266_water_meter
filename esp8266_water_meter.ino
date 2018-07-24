@@ -4,14 +4,15 @@
  
 */
 
-// stuff needed for DHT22 sensor
+#include <ESP8266WiFi.h>
+#include <PubSubClient.h>
+#include <WiFiClient.h> 
 #include "DHT.h"
-#define DHTPIN 4     // what digital pin we're connected to
+#include "config.h"  // defines all constants starting with CFG_
 
-// Uncomment whatever type you're using!
-//#define DHTTYPE DHT11   // DHT 11
-#define DHTTYPE DHT22   // DHT 22  (AM2302), AM2321
-//#define DHTTYPE DHT21   // DHT 21 (AM2301)
+// stuff needed for DHT22 sensor
+#define DHTPIN  CFG_DHTPIN    // what digital pin we're connected to
+#define DHTTYPE CFG_DHTTYPE
 // Connect pin 1 (on the left) of the sensor to +5V
 // NOTE: If using a board with 3.3V logic like an Arduino Due connect pin 1
 // to 3.3V instead of 5V!
@@ -24,11 +25,6 @@
 // tweak the timings for faster processors.  This parameter is no longer needed
 // as the current DHT reading algorithm adjusts itself to work on faster procs.
 DHT dht(DHTPIN, DHTTYPE);
-
-#include <ESP8266WiFi.h>
-#include <PubSubClient.h>
-#include <WiFiClient.h> 
-#include "config.h"  // defines all constants starting with CFG_
 
 const char* ssid = CFG_WIFI_SSID ;  
 const char* password = CFG_WIFI_PASSWORD;
@@ -107,9 +103,9 @@ void mqtt_reconnect() {
     if (mqttClient.connect("ESP8266Client")) {
       Serial.println("connected");
       // Once connected, publish an announcement...
-      mqttClient.publish("water_meter/status", "mqtt_reconnected");
+      mqttClient.publish(CFG_MQTT_TOPIC_STATUS, "mqtt_reconnected");
       // ... and resubscribe
-      mqttClient.subscribe("inTopic");
+      mqttClient.subscribe(CFG_MQTT_SUBSCRIBE_TOPIC);
     } else {
       Serial.print("failed, rc=");
       Serial.print(mqttClient.state());
@@ -135,29 +131,29 @@ void loop() {
     lastMsgTimestamp = now;
 
     // publishing the water meter pulse count
-    Serial.print("water_meter/pulse_count=");
+    Serial.print("pulse_count=");
     Serial.println(pulseCount);
     snprintf(mqttPublishMsg, 50, "%d", pulseCount);
-    mqttClient.publish("water_meter/pulse_count", mqttPublishMsg);
+    mqttClient.publish(CFG_MQTT_TOPIC_WATER_METER_PULSE_COUNT , mqttPublishMsg);
 
     // Reading temperature or humidity takes about 250 milliseconds!
     // Sensor readings may also be up to 2 seconds 'old' (its a very slow sensor)
     float h = dht.readHumidity();
     if (! isnan(h)){
-      Serial.print("nodeMCU/humidity= ");
+      Serial.print("humidity= ");
       Serial.println(h);
       snprintf(mqttPublishMsg, 50, "%f", h);
-      mqttClient.publish("nodeMCU/humidity", mqttPublishMsg);
+      mqttClient.publish(CFG_MQTT_TOPIC_HUMIDITY, mqttPublishMsg);
     }
 
     // Read temperature as Celsius (the default)
     float t = dht.readTemperature();
     if (! isnan(t)){
-      Serial.print("nodeMCU/temperature=");
+      Serial.print("temperature=");
       Serial.print(t);
       Serial.println(" °C");
       snprintf(mqttPublishMsg, 50, "%f", t);
-      mqttClient.publish("nodeMCU/temperature", mqttPublishMsg);
+      mqttClient.publish(CFG_MQTT_TOPIC_TEMPERATURE , mqttPublishMsg);
     }
   }
 }
