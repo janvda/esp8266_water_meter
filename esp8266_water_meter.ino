@@ -7,24 +7,7 @@
 #include <ESP8266WiFi.h>
 #include <PubSubClient.h>
 #include <WiFiClient.h> 
-#include "DHT.h"
 #include "config.h"  // defines all constants starting with CFG_
-
-// stuff needed for DHT22 sensor
-#define DHTPIN  CFG_DHTPIN    // what digital pin we're connected to
-#define DHTTYPE CFG_DHTTYPE
-// Connect pin 1 (on the left) of the sensor to +5V
-// NOTE: If using a board with 3.3V logic like an Arduino Due connect pin 1
-// to 3.3V instead of 5V!
-// Connect pin 2 of the sensor to whatever your DHTPIN is
-// Connect pin 4 (on the right) of the sensor to GROUND
-// Connect a 10K resistor from pin 2 (data) to pin 1 (power) of the sensor
-
-// Initialize DHT sensor.
-// Note that older versions of this library took an optional third parameter to
-// tweak the timings for faster processors.  This parameter is no longer needed
-// as the current DHT reading algorithm adjusts itself to work on faster procs.
-DHT dht(DHTPIN, DHTTYPE);
 
 const char* ssid = CFG_WIFI_SSID ;  
 const char* password = CFG_WIFI_PASSWORD;
@@ -46,7 +29,6 @@ void onWaterMeterPulse() {
 
 void setup() {
     Serial.begin(115200);
-    dht.begin();
     delay(100);
     Serial.println("Preparing the reed switch water meter project...");
     
@@ -136,25 +118,6 @@ void loop() {
     snprintf(mqttPublishMsg, 50, "%d", pulseCount);
     mqttClient.publish(CFG_MQTT_TOPIC_WATER_METER_PULSE_COUNT , mqttPublishMsg);
 
-    // Reading temperature or humidity takes about 250 milliseconds!
-    // Sensor readings may also be up to 2 seconds 'old' (its a very slow sensor)
-    float h = dht.readHumidity();
-    if (! isnan(h)){
-      Serial.print("humidity= ");
-      Serial.println(h);
-      snprintf(mqttPublishMsg, 50, "%f", h);
-      mqttClient.publish(CFG_MQTT_TOPIC_HUMIDITY, mqttPublishMsg);
-    }
-
-    // Read temperature as Celsius (the default)
-    float t = dht.readTemperature();
-    if (! isnan(t)){
-      Serial.print("temperature=");
-      Serial.print(t);
-      Serial.println(" °C");
-      snprintf(mqttPublishMsg, 50, "%f", t);
-      mqttClient.publish(CFG_MQTT_TOPIC_TEMPERATURE , mqttPublishMsg);
-    }
   }
 }
 
