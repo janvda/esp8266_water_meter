@@ -30,10 +30,10 @@ void onWaterMeterPulse() {
 void setup() {
     Serial.begin(115200);
     delay(100);
-    Serial.println("Preparing the reed switch water meter project...");
+    Serial.println("\nPreparing the reed switch water meter project...");
     
-    pinMode(pin, OUTPUT);  // should this not be INPUT instead of OUTPUT ?
-    attachInterrupt(digitalPinToInterrupt(pin), onWaterMeterPulse, CHANGE);
+    pinMode(pin, INPUT_PULLUP);  // should this not be INPUT instead of OUTPUT ?
+    attachInterrupt(digitalPinToInterrupt(pin), onWaterMeterPulse, LOW);
 
     // setting up wifi connnection
     Serial.println();
