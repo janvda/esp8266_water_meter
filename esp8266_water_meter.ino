@@ -19,7 +19,9 @@ PubSubClient mqttClient(espClient);
 long lastMsgTimestamp = 0;
 char mqttPublishMsg[50];
 
-int pin = 2;   // reed switch is connected GPIO2 = D4 (https://circuits4you.com/2017/12/31/nodemcu-pinout/)
+// regarding GPIO pins functions https://tttapa.github.io/ESP8266/Chap04%20-%20Microcontroller.html
+int reedSwitchPin = 4;   // reed switch is connected GPIO4 = D2 (https://circuits4you.com/2017/12/31/nodemcu-pinout/)
+
 volatile int pulseCount = 0;
 
 void onWaterMeterPulse() {
@@ -32,8 +34,8 @@ void setup() {
     delay(100);
     Serial.println("\nPreparing the reed switch water meter project...");
     
-    pinMode(pin, OUTPUT);  // should this not be INPUT instead of OUTPUT ?
-    attachInterrupt(digitalPinToInterrupt(pin), onWaterMeterPulse, CHANGE);
+    pinMode(reedSwitchPin, INPUT_PULLUP);
+    attachInterrupt(digitalPinToInterrupt(reedSwitchPin), onWaterMeterPulse, CHANGE);
 
     // setting up wifi connnection
     Serial.println();
