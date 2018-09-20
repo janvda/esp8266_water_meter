@@ -26,7 +26,7 @@ volatile int pulseCount = 0;
 
 void onWaterMeterPulse() {
     pulseCount++;
-    Serial.println(pulseCount);
+    // Serial.println(pulseCount);
 }
 
 void setup() {
@@ -116,8 +116,8 @@ void loop() {
     lastMsgTimestamp = now;
 
     // publishing the water meter pulse count
-    Serial.print("pulse_count=");
-    Serial.println(pulseCount);
+    // Serial.print("pulse_count=");
+    // Serial.println(pulseCount);
     snprintf(mqttPublishMsg, 50, "%d", pulseCount);
     mqttClient.publish(CFG_MQTT_TOPIC_WATER_METER_PULSE_COUNT , mqttPublishMsg);
   }
