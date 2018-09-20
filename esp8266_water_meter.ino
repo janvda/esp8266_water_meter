@@ -24,7 +24,7 @@ volatile int pulseCount = 0;
 
 void onWaterMeterPulse() {
     pulseCount++;
-    // Serial.println(pulseCount);
+    Serial.println(pulseCount);
 }
 
 void setup() {
@@ -32,8 +32,8 @@ void setup() {
     delay(100);
     Serial.println("\nPreparing the reed switch water meter project...");
     
-    pinMode(pin, INPUT_PULLUP);  // should this not be INPUT instead of OUTPUT ?
-    attachInterrupt(digitalPinToInterrupt(pin), onWaterMeterPulse, LOW);
+    pinMode(pin, OUTPUT);  // should this not be INPUT instead of OUTPUT ?
+    attachInterrupt(digitalPinToInterrupt(pin), onWaterMeterPulse, CHANGE);
 
     // setting up wifi connnection
     Serial.println();
@@ -114,8 +114,8 @@ void loop() {
     lastMsgTimestamp = now;
 
     // publishing the water meter pulse count
-    // Serial.print("pulse_count=");
-    // Serial.println(pulseCount);
+    Serial.print("pulse_count=");
+    Serial.println(pulseCount);
     snprintf(mqttPublishMsg, 50, "%d", pulseCount);
     mqttClient.publish(CFG_MQTT_TOPIC_WATER_METER_PULSE_COUNT , mqttPublishMsg);
   }
