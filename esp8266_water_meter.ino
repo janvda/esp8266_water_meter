@@ -56,28 +56,6 @@ void setup() {
     Serial.println(WiFi.localIP());  
 
     mqttClient.setServer(mqttServer, 1883);
-    mqttClient.setCallback(mqttCallback);
-}
-
-// is not used
-void mqttCallback(char* topic, byte* payload, unsigned int length) {
-  Serial.print("Message arrived [");
-  Serial.print(topic);
-  Serial.print("] ");
-  for (int i = 0; i < length; i++) {
-    Serial.print((char)payload[i]);
-  }
-  Serial.println();
-
-  // Switch on the LED if an 1 was received as first character
-  if ((char)payload[0] == '1') {
-    digitalWrite(BUILTIN_LED, LOW);   // Turn the LED on (Note that LOW is the voltage level
-    // but actually the LED is on; this is because
-    // it is acive low on the ESP-01)
-  } else {
-    digitalWrite(BUILTIN_LED, HIGH);  // Turn the LED off by making the voltage HIGH
-  }
-
 }
 
 void mqtt_reconnect() {
@@ -89,8 +67,6 @@ void mqtt_reconnect() {
       Serial.println("connected");
       // Once connected, publish an announcement...
       mqttClient.publish(CFG_MQTT_TOPIC_STATUS, "mqtt_reconnected");
-      // ... and resubscribe
-      mqttClient.subscribe(CFG_MQTT_SUBSCRIBE_TOPIC);
     } else {
       Serial.print("failed, rc=");
       Serial.print(mqttClient.state());
@@ -111,8 +87,7 @@ void loop() {
   // sending an mqtt message every 5 second with pulse count
   long now = millis();
   if (now - lastMsgTimestamp > 5000) {
-
-
+    
     lastMsgTimestamp = now;
 
     // publishing the water meter pulse count
