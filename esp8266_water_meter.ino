@@ -1,3 +1,22 @@
+#include <ESP8266WiFiGratuitous.h>
+#include <WiFiServerSecure.h>
+#include <WiFiClientSecure.h>
+#include <ArduinoWiFiServer.h>
+#include <WiFiClientSecureBearSSL.h>
+#include <ESP8266WiFi.h>
+#include <ESP8266WiFiMulti.h>
+#include <WiFiUdp.h>
+#include <ESP8266WiFiType.h>
+#include <CertStoreBearSSL.h>
+#include <ESP8266WiFiAP.h>
+#include <WiFiClient.h>
+#include <BearSSLHelpers.h>
+#include <WiFiServer.h>
+#include <ESP8266WiFiScan.h>
+#include <WiFiServerSecureBearSSL.h>
+#include <ESP8266WiFiGeneric.h>
+#include <ESP8266WiFiSTA.h>
+
 /*
  Created by Jan Van den Audenaerde
  Based on some ESP8266 and PubSub code examples 
@@ -24,7 +43,7 @@ int reedSwitchPin = 4;   // reed switch is connected GPIO4 = D2 (https://circuit
 
 volatile int pulseCount = 0;
 
-void onWaterMeterPulse() {
+void ICACHE_RAM_ATTR  onWaterMeterPulse() {
     pulseCount++;
     // Serial.println(pulseCount);
 }
@@ -97,4 +116,3 @@ void loop() {
     mqttClient.publish(CFG_MQTT_TOPIC_WATER_METER_PULSE_COUNT , mqttPublishMsg);
   }
 }
-
