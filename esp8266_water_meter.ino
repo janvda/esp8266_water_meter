@@ -22,11 +22,10 @@
 #include <WiFiClient.h> 
 #include "config.h"  // defines all constants starting with CFG_
 
-const char* ssid      = CFG_WIFI_SSID ;  
-const char* password  = CFG_WIFI_PASSWORD;
-const char* host      = CFG_HOST;
-
+const char* ssid       = CFG_WIFI_SSID ;  
+const char* password   = CFG_WIFI_PASSWORD;
 const char* mqttServer = CFG_MQTT_SERVER;
+
 WiFiClient   espClient;
 PubSubClient mqttClient(espClient);
 long lastMsgTimestamp = 0;

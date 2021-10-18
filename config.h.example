@@ -1,0 +1,10 @@
+// An example Configuration file
+//  rename this file to config.h and update below parameters for your environment.
+
+#define CFG_WIFI_SSID     "MY_WIFI_SSID"      //  choose approprate ssid 
+#define CFG_WIFI_PASSWORD "MY_WIFI_PASSWORD"  //  specify appropriate ssid password
+#define CFG_MQTT_SERVER   "192.168.2.31"      //  specify IP address of MQTT server
+
+#define CFG_MQTT_TOPIC_WATER_METER_PULSE_COUNT      "water_meter/pulse_count"
+#define CFG_MQTT_TOPIC_WATER_METER_RAW_PULSE_COUNT  "water_meter/raw_pulse_count"
+#define CFG_MQTT_TOPIC_STATUS                       "water_meter/status"
